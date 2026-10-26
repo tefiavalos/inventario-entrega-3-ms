@@ -1,6 +1,22 @@
 import { StockObserver } from "./StockObserver";
+import { ProductoInexistenteError, StockInsuficienteError } from "./errores";
 
 export const LOW_STOCK_THRESHOLD = 10;
+
+/*
+ * Valida que una cantidad sea un entero mayor o igual al mínimo indicado.
+ */
+function validarCantidad(
+  cantidad: number,
+  minimo: number,
+  descripcion: string,
+): void {
+  if (!Number.isInteger(cantidad) || cantidad < minimo) {
+    throw new RangeError(
+      `${descripcion} debe ser un entero mayor o igual a ${minimo}`,
+    );
+  }
+}
 
 /*
  * Notificador (Publisher). Mantiene el stock de cada producto y avisa a los
@@ -20,21 +36,35 @@ export class InventoryManager {
   }
 
   update_stock(productId: string, quantity: number): void {
+    validarCantidad(quantity, 0, "La cantidad");
     this.stock[productId] = quantity;
     this.checkLowStock(productId);
   }
 
   sell_product(productId: string, sold: number): void {
-    this.stock[productId] -= sold;
+    const disponible = this.getStock(productId);
+    validarCantidad(sold, 1, "La cantidad vendida");
+
+    if (sold > disponible) {
+      throw new StockInsuficienteError(productId, disponible, sold);
+    }
+
+    this.stock[productId] = disponible - sold;
     this.checkLowStock(productId);
   }
 
   getStock(productId: string): number {
-    return this.stock[productId];
+    const cantidad = this.stock[productId];
+
+    if (cantidad === undefined) {
+      throw new ProductoInexistenteError(productId);
+    }
+
+    return cantidad;
   }
 
   private checkLowStock(productId: string): void {
-    const quantity = this.stock[productId];
+    const quantity = this.getStock(productId);
 
     if (quantity < LOW_STOCK_THRESHOLD) {
       this.notify(productId, quantity);
