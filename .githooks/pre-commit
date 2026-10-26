@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+# Pre-commit hook: corre Formatter, Linter y tests en ese orden.
+# Si cualquiera de los tres falla, el script termina con código 1 y Git
+# cancela el commit. Se activa con `npm install` (script "prepare").
+
+echo "=============================================="
+echo " Pre-commit: controles de la Definition of Done"
+echo "=============================================="
+
+echo ""
+echo "[1/3] Formatter (Prettier)..."
+if ! npm run --silent format:check; then
+  echo ""
+  echo "COMMIT CANCELADO: hay archivos sin el formato del proyecto."
+  echo "Ejecutar 'npm run format', revisar los cambios y volver a hacer git add."
+  exit 1
+fi
+
+echo ""
+echo "[2/3] Linter (oxlint) y compilación (tsc)..."
+if ! npm run --silent lint; then
+  echo ""
+  echo "COMMIT CANCELADO: el linter encontró errores."
+  exit 1
+fi
+echo "oxlint: sin errores."
+if ! npm run --silent build; then
+  echo ""
+  echo "COMMIT CANCELADO: el código no compila (tsc)."
+  exit 1
+fi
+echo "tsc: compilación sin errores."
+
+echo ""
+echo "[3/3] Tests unitarios y cobertura..."
+if ! npm test --silent; then
+  echo ""
+  echo "COMMIT CANCELADO: hay tests fallidos o la cobertura está por debajo del 80%."
+  exit 1
+fi
+
+echo ""
+echo "OK: formato, linter, tipos y tests en verde. Se registra el commit."
+exit 0

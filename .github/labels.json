@@ -1,0 +1,22 @@
+[
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "Fallo confirmado que rompe un comportamiento esperado"
+  },
+  {
+    "name": "feature",
+    "color": "0e8a16",
+    "description": "Nueva funcionalidad del negocio"
+  },
+  {
+    "name": "technical-debt",
+    "color": "fbca04",
+    "description": "Refactorización, complejidad alta o desvíos detectados por el linter"
+  },
+  {
+    "name": "documentation",
+    "color": "0075ca",
+    "description": "Contratos (interfaces), README o diagramas"
+  }
+]

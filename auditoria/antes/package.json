@@ -1,0 +1,10 @@
+{
+  "name": "reporte-ventas-legacy",
+  "version": "0.9.0",
+  "private": true,
+  "main": "reporteVentas.ts",
+  "dependencies": {
+    "lodash": "4.17.15",
+    "moment": "2.29.1"
+  }
+}

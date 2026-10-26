@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript"],
+  "ignorePatterns": ["dist/**", "evidencias/**"],
+  "rules": {
+    "no-unused-vars": "error",
+    "no-redeclare": "error",
+    "no-unreachable": "error",
+    "no-dupe-else-if": "error",
+    "no-duplicate-imports": "error",
+    "eqeqeq": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-eval": "error",
+    "no-param-reassign": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/no-require-imports": "error",
+    "complexity": ["error", { "max": 8 }],
+    "max-depth": ["error", 3],
+    "max-lines-per-function": ["error", { "max": 50, "skipComments": true }],
+    "max-params": ["error", 5]
+  },
+  "overrides": [
+    {
+      "files": ["tests/**/*.ts"],
+      "rules": { "max-lines-per-function": "off" }
+    }
+  ]
+}

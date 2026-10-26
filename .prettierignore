@@ -1,0 +1,5 @@
+node_modules
+dist
+evidencias
+auditoria/antes
+*.md
